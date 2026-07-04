@@ -1,0 +1,108 @@
+LINUX COMMANDS REFERENCE
+=========================
+
+NAVIGATION & FILES
+------------------
+pwd        - print current directory path
+ls -la     - list all files (including hidden) with details (permissions, size, date)
+cd         - change directory
+cp         - copy files/folders
+mv         - move or rename files
+rm         - delete files (rm -r for folders)
+mkdir      - create a new directory
+find       - search for files by name, type, size, date, etc. across a directory tree
+locate     - fast file search using a prebuilt index (needs 'updatedb' run first)
+
+VIEWING & EDITING TEXT
+-----------------------
+cat        - print a file's full contents to screen
+less       - scroll through a file page-by-page (better for long files)
+head       - show first 10 lines of a file
+tail -f    - show last lines of a file and keep watching for new lines (live log monitoring)
+nano       - simple terminal text editor
+vim        - powerful but steeper-learning-curve text editor
+grep       - search text for a pattern/keyword (e.g. grep "error" logfile)
+sed        - stream editor for find-and-replace on text
+awk        - pattern-scanning and text-processing language, good for pulling columns out of structured text
+
+PERMISSIONS & OWNERSHIP
+-------------------------
+chmod      - change file permissions (read/write/execute)
+chown      - change file owner/group
+sudo       - run a command with admin (root) privileges
+su         - switch to another user account (often root)
+whoami     - show current logged-in username
+id         - show user ID, group ID, and group memberships
+
+PROCESS & SYSTEM MONITORING
+------------------------------
+ps aux     - list all running processes
+top        - live view of running processes and resource usage
+htop       - nicer, interactive version of top
+kill       - stop a process by its ID (PID)
+killall    - stop a process by name
+systemctl  - start/stop/enable/check status of system services
+journalctl - view logs collected by systemd (boot logs, service logs)
+
+NETWORKING
+-----------
+ip a          - show network interfaces and their IP addresses
+ip route      - show routing table (how traffic leaves your machine)
+ping          - test connectivity to a host
+traceroute    - show the path (hops) packets take to reach a host
+netstat -tulnp - show listening ports and which process owns them (older tool)
+ss -tulnp     - same purpose as netstat, faster, modern replacement
+curl          - fetch/send data to a URL from the command line
+wget          - download files from the web
+dig           - query DNS records for a domain
+nslookup      - simpler DNS lookup tool
+whois         - look up domain/IP registration info
+
+WIFI / HARDWARE DIAGNOSTICS
+------------------------------
+lspci      - list PCI hardware devices (network cards, GPU, etc.)
+lsusb      - list connected USB devices
+lsmod      - list currently loaded kernel modules/drivers
+modprobe   - load or remove a kernel module/driver
+dmesg      - show kernel ring buffer messages (boot and hardware events/errors)
+rfkill     - check/control wireless radio soft/hard blocks
+lshw       - detailed hardware listing (CPU, memory, storage, network)
+
+PACKAGE MANAGEMENT (Ubuntu/Debian)
+--------------------------------------
+apt update            - refresh the list of available packages/versions
+apt upgrade           - install available updates for installed packages
+apt install           - install a new package
+apt list --upgradable - show which installed packages have updates pending
+dpkg -l               - list all installed packages
+
+DISK & STORAGE
+----------------
+df -h       - show disk space usage per filesystem, human-readable
+du -sh      - show size of a specific folder/file, human-readable
+lsblk       - list block devices (drives and partitions) in a tree view
+mount       - attach a filesystem/drive to a directory
+umount      - detach a mounted filesystem
+fdisk -l    - list disk partitions and details
+blkid       - show UUIDs and filesystem types of block devices
+/etc/fstab  - config file defining drives to auto-mount at boot (not a command, a file you edit)
+
+SECURITY / BLUE TEAM SPECIFIC
+---------------------------------
+tcpdump           - capture and inspect network packets in real time
+last / lastlog    - show recent user login history
+who / w           - show who is currently logged into the system
+history           - show your past typed commands
+chattr / lsattr   - set/view special file attributes (e.g. immutable flag) - useful for spotting tampering
+auditctl          - configure the Linux audit daemon (tracks system calls/events for forensics)
+strings           - pull out readable text strings from a binary file (used in malware/file triage)
+file              - identify a file's actual type regardless of its extension
+md5sum / sha256sum - generate a hash of a file, used to verify integrity or compare against known malware hashes
+nmap              - scan a network/host to discover open ports and services
+ssh               - securely connect to and control a remote machine over the command line
+
+KEY LOG LOCATIONS
+--------------------
+/var/log/auth.log  - authentication attempts
+/var/log/syslog    - general system log
+/var/log/dpkg.log  - package install history
