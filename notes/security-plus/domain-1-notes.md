@@ -90,3 +90,49 @@
 
 5. What does CIA stand for in cybersecurity?
    Answer: Confidentiality, Integrity, Availability
+
+## 1.3 Non-Repudiation
+
+### Definition
+- Non-repudiation means a person cannot deny having performed an action
+- Provides proof that an action was carried out by a specific individual
+
+### How It Works
+Non-repudiation combines two elements:
+- Authentication — proves who you are
+- Integrity — proves the message was not changed
+
+Together they create undeniable proof of an action.
+
+### Real World Examples
+- Signing a letter or document with your signature
+- Digitally signing an email
+- Signing a contract
+- Audit logs showing a user logged in and performed an action
+
+### Technology That Provides Non-Repudiation
+- Digital Signatures — primary technology for non-repudiation
+- PKI (Public Key Infrastructure) — framework that supports digital signatures
+- Audit Logs — record of who did what and when
+
+### How Digital Signatures Work
+1. Sender signs message with their private key
+2. Receiver verifies signature using sender's public key
+3. If verified — proof that sender sent it and it was not altered
+4. Sender cannot deny sending it
+
+### Key Distinction
+- Encryption = protects confidentiality
+- Hashing = protects integrity
+- Digital Signatures = provides non-repudiation + integrity + authentication
+
+### Common Exam Question
+Q: A user denies sending an email authorising a bank transfer.
+   Which technology proves they did?
+A: Digital Signature — provides non-repudiation
+
+### Summary
+- Non-repudiation = can't deny it
+- Digital signatures = main tool
+- Combines authentication + integrity
+- Used in emails, contracts, transactions, legal documents
