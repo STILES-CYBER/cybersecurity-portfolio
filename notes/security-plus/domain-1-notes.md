@@ -136,3 +136,80 @@ A: Digital Signature — provides non-repudiation
 - Digital signatures = main tool
 - Combines authentication + integrity
 - Used in emails, contracts, transactions, legal documents
+
+
+## 1.4 AAA Framework
+
+### Definition
+AAA stands for Authentication, Authorization, and Accounting
+A security framework that controls access to network resources
+
+### The Three Components
+
+#### Authentication — Who are you?
+- Process of verifying a user's identity
+- Confirms you are who you claim to be
+- Examples:
+  - Username and password
+  - Fingerprint scan
+  - Smart card
+  - MFA (Multi-Factor Authentication)
+
+#### Authorization — What can you do?
+- Process of determining what resources a user can access
+- Checks roles and permissions after authentication
+- Examples:
+  - Admin can access all files
+  - Guest can only browse the internet
+  - HR staff can only access HR systems
+  - Read-only vs read-write permissions
+
+#### Accounting — What did you do?
+- Process of tracking and logging user activity
+- Creates an audit trail of actions performed
+- Examples:
+  - Security logs on company WiFi
+  - Login/logout timestamps
+  - Files accessed or modified
+  - Commands executed on a server
+
+### How AAA Works Together
+1. User attempts to access network (Authentication)
+2. System verifies identity — username + password
+3. System checks what user is allowed to do (Authorization)
+4. System records all user actions (Accounting)
+
+### AAA Protocols to Know
+
+| Protocol | Used For |
+|---|---|
+| RADIUS | Remote access and WiFi authentication |
+| TACACS+ | Cisco device administration |
+| Kerberos | Windows Active Directory authentication |
+| LDAP | Directory services and user management |
+
+### Key Distinctions
+- Authentication vs Authorization:
+  - Authentication = verifying identity (who you are)
+  - Authorization = verifying permissions (what you can do)
+  - You must authenticate before you can be authorized
+
+### Common Exam Questions
+Q: Which AAA component tracks what resources users accessed and when?
+A: Accounting
+
+Q: A user logs in with a password and fingerprint — which AAA component is this?
+A: Authentication
+
+Q: A user can read files but not delete them — which AAA component controls this?
+A: Authorization
+
+Q: Which protocol is commonly used for WiFi authentication?
+A: RADIUS
+
+### Summary
+- AAA = Authentication + Authorization + Accounting
+- Authentication = verify identity
+- Authorization = verify permissions
+- Accounting = track activity
+- RADIUS = WiFi, TACACS+ = Cisco, Kerberos = Windows
