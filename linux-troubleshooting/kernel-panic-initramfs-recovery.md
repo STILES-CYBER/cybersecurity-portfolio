@@ -98,3 +98,75 @@ Confirmed: system now boots cleanly into `7.0.0-28-generic` by default.
 - **`apt --reinstall` needs an up-to-date package cache** (`apt update`
   first) and only works if the kernel came from a configured repo; a
   missing initramfs doesn't always mean the package itself is broken.
+
+## Addendum: VirtualBox broke on the same new kernel
+
+After the boot issue was resolved, a second, related problem surfaced:
+Ubuntu's Apport crash reporter flagged a DKMS build failure for
+`virtualbox-dkms`, dated the same day the new kernel was installed.
+
+### Symptom
+
+```
+sudo modprobe vboxdrv
+modprobe: FATAL: Module vboxdrv not found in directory /lib/modules/7.0.0-28-generic
+```
+
+Building the module manually surfaced the real error:
+
+```
+ERROR: modpost: module vboxdrv uses symbol kvm_enable_virtualization from namespace module:kvm-amd,kvm-intel, but does not import it.
+ERROR: modpost: module vboxdrv uses symbol kvm_disable_virtualization from namespace module:kvm-amd,kvm-intel, but does not import it.
+ERROR: modpost: module vboxdrv uses symbol cr4_update_irqsoff from namespace module:kvm,kvm-amd,kvm-intel, but does not import it.
+ERROR: modpost: module vboxdrv uses symbol cr4_read_shadow from namespace module:kvm,kvm-amd,kvm-intel, but does not import it.
+```
+
+### Root Cause
+
+Recent Linux kernels (6.16+) moved several symbols VirtualBox's `vboxdrv`
+module depends on into a restricted module namespace reserved for KVM's
+own vendor modules (`kvm-amd`, `kvm-intel`). Out-of-tree modules like
+VirtualBox 7.0.x's driver can no longer import them, so DKMS fails to
+build `vboxdrv` against any kernel with this change — a known,
+still-evolving upstream compatibility issue affecting VirtualBox users
+across multiple distros (Fedora, openSUSE, Ubuntu, Arch), not something
+specific to this machine.
+
+### Fix
+
+Oracle's newer VirtualBox releases (7.2.x line) adapted to the new
+kernel API. Upgrading resolved it entirely:
+
+```bash
+sudo apt purge virtualbox virtualbox-dkms virtualbox-qt virtualbox-guest-additions-iso
+sudo dpkg --configure -a
+sudo apt --fix-broken install
+
+wget https://download.virtualbox.org/virtualbox/7.2.14/virtualbox-7.2_7.2.14-174565~Ubuntu~noble_amd64.deb
+sudo apt install ./virtualbox-7.2_7.2.14-174565~Ubuntu~noble_amd64.deb
+
+sudo modprobe vboxdrv
+lsmod | grep vbox      # confirms vboxdrv, vboxnetadp, vboxnetflt all loaded
+```
+
+Confirmed all three lab VMs (Kali, Windows 10, Security Onion) were
+recognized and intact after the upgrade via `VBoxManage list vms`.
+
+### Lessons / Notes
+
+- **A single kernel update can break multiple things independently.**
+  The initramfs issue and the VirtualBox DKMS issue were two separate
+  failures triggered by the same kernel install — worth checking
+  Apport (`/var/crash/`) after any boot issue, since it can surface
+  follow-on problems that don't block booting but do block other
+  services.
+- **Out-of-tree kernel modules (DKMS-built drivers) are a recurring
+  risk on rolling/frequently-updated kernels.** VirtualBox, Nvidia
+  drivers, and similar packages can silently stop building against a
+  new kernel; `apt purge`'s crash report before reinstalling avoided a
+  stuck `dpkg` state (a leftover crash report file blocked DKMS from
+  writing a new one, which cascaded into a broken package state).
+- **Prefer Oracle's official VirtualBox release over the Ubuntu-repo
+  version** when hitting kernel compatibility issues — Ubuntu's
+  `virtualbox` package lagged behind the fix that was already available
+  upstream.
